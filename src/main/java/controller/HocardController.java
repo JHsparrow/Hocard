@@ -51,9 +51,11 @@ public class HocardController extends HttpServlet {
 		String site = null;
 		
 		switch(command) {
-		case "/addcard" : site = "addCard.jsp";
-		case "/insert" : site = insertCard(request);
-		case "/mycard" : site = viewCardlist(request);
+		case "/addcard" : site = "addCard.jsp"; break;
+		case "/insert" : site = insertCard(request); break;
+		case "/mycard" : site = viewAllCardlist(request); break;
+		case "/viewcard" : site = viewCard(request); break;
+		case "/modifycard" : site = viewformodify(request); break;
 		}
 		
 		if(site.startsWith("redirect:/")) {
@@ -80,7 +82,7 @@ public class HocardController extends HttpServlet {
 		return "redirect:/addcard";
 	}
 	
-	public String viewCardlist(HttpServletRequest request) {
+	public String viewAllCardlist(HttpServletRequest request) {
 		List<CardList> list;
 		try {
 			list = dao.getCardList();
@@ -91,6 +93,46 @@ public class HocardController extends HttpServlet {
 			request.setAttribute("error", "카드 목록이 정상적으로 처리되지 않았습니다!!");
 		}
 		return "cardList.jsp";
+	}
+	
+	public String viewCard(HttpServletRequest request) {
+		int card_no = Integer.parseInt(request.getParameter("card_no"));
+        try {
+        	CardView cl = dao.ViewforModi(card_no);			
+			request.setAttribute("card", cl);
+		} catch (Exception e) {
+			e.printStackTrace();
+			ctx.log("카드 정보 출력 실패!");
+			request.setAttribute("error", "카드정보를 정상적으로 가져오지 못했습니다!!");
+		}
+		return "cardview.jsp";
+	}
+	
+	public String viewformodify(HttpServletRequest request) {
+		int card_no = Integer.parseInt(request.getParameter("card_no"));
+        try {
+        	CardList cl = dao.ViewCard(card_no);			
+			request.setAttribute("card", cl);
+		} catch (Exception e) {
+			e.printStackTrace();
+			ctx.log("카드 정보 출력 실패!");
+			request.setAttribute("error", "카드정보를 정상적으로 가져오지 못했습니다!!");
+		}
+		return "cardmodify.jsp";
+	}
+	
+	public String modifyCard(HttpServletRequest request) {
+		ModifyCard mc = new ModifyCard();
+		try {	
+			BeanUtils.populate(mc, request.getParameterMap());
+			dao.ModifyCard(mc);
+		} catch (Exception e) {
+			e.printStackTrace();
+			ctx.log("수정 과정에서 문제 발생!!");
+			request.setAttribute("error", "카드 수정 실패");
+			return "addCard.jsp";
+		}
+		return "redirect:/addcard";
 	}
 
 }

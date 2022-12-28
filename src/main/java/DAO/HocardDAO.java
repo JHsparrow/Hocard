@@ -90,4 +90,61 @@ public class HocardDAO {
 		
 	}
 	
+	public CardList ViewCard(int card_no) throws Exception {
+		CardList cl = new CardList();
+		Connection conn = open();
+		
+		String sql = "select card_no,card_name,rarity,attact,defense from card_list where card_no = "+card_no;
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();		
+		
+		try (conn; pstmt; rs) {
+			if (rs.next()) {				
+				cl.setCard_no(rs.getInt(1));
+				cl.setCard_name(rs.getString(2));
+				cl.setRarity(rs.getString(3));
+				cl.setAttack(rs.getInt(4));
+				cl.setDefense(rs.getInt(5));
+			}
+			return cl;
+		}
+	}
+	
+	public CardView ViewforModi(int card_no) throws Exception {
+		CardView cl = new CardView();
+		Connection conn = open();
+		
+		String sql = "select card_no,card_name,rarity,attact,defense from card_list where card_no = "+card_no;
+		
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+		ResultSet rs = pstmt.executeQuery();		
+		
+		try (conn; pstmt; rs) {
+			if (rs.next()) {				
+				cl.setCard_no(rs.getInt(1));
+				cl.setCard_name(rs.getString(2));
+				cl.setRarity(rs.getString(3));
+				cl.setAttack(rs.getInt(4));
+				cl.setDefense(rs.getInt(5));
+			}
+			return cl;
+		}
+	}
+	
+	public void ModifyCard(ModifyCard ac) throws Exception {
+		Connection conn = open();
+
+		String sql = "update card_list set card_name = ?, rarity = ?, attact = ? , defense = ? where card_no = ? ";
+		PreparedStatement pstmt = conn.prepareStatement(sql);
+
+		try (conn; pstmt) {
+			pstmt.setString(1, ac);
+			pstmt.setString(2, ac.getRarity());
+			pstmt.setInt(3, ac.getAttack());
+			pstmt.setInt(4, ac.getDefense());
+			pstmt.executeUpdate();
+		}
+	}
+	
 }

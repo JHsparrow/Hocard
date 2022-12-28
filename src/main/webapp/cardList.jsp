@@ -14,36 +14,16 @@
 	<section>
 		<div class="list_con">
 			<ul>
-				<li>
-					<p>
-						<img class="List_attack" src="./images/attack2.png">
-						<img class="List_hp" src="./images/hp.png">
-					</p>
+				<c:forEach var="i" items="${cardList}" varStatus="status">
+				<c:set var="rarity" value="${i.rarity}"></c:set>
+				<li class="border_<c:out value="${rarity}" />" onclick="location.href='viewcard?card_no=${i.card_no}'">
+					<img class="List_attack" src="./images/attack3.png">
+					<img class="List_hp" src="./images/hp.png">
+					<span class="list_attack_point">${i.attack}</span>
+					<span class="list_hp_point">${i.defense}</span>
+					<span class="list_name">${i.card_name}</span>
 				</li>
-				<li>
-					<p>
-						<img class="List_attack" src="./images/attack2.png">
-						<img class="List_hp" src="./images/hp.png">
-					</p>
-				</li>
-				<li>
-					<p>
-						<img class="List_attack" src="./images/attack2.png">
-						<img class="List_hp" src="./images/hp.png">
-					</p>
-				</li>
-				<li>
-					<p>
-						<img class="List_attack" src="./images/attack2.png">
-						<img class="List_hp" src="./images/hp.png">
-					</p>
-				</li>
-				<li>
-					<p>
-						<img class="List_attack" src="./images/attack2.png">
-						<img class="List_hp" src="./images/hp.png">
-					</p>
-				</li>
+				</c:forEach>
 			</ul>
 		</div>
 	</section>
