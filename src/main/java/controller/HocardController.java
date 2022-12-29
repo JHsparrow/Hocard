@@ -21,8 +21,7 @@ import org.apache.commons.beanutils.BeanUtils;
 public class HocardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private HocardDAO dao;
-	private ServletContext ctx;   
-    
+	private ServletContext ctx;  
 	
     @Override
 	public void init() throws ServletException {
@@ -30,22 +29,17 @@ public class HocardController extends HttpServlet {
 		dao = new HocardDAO();
 		ctx = getServletContext();
 	}
-
-
 	public HocardController() {
         super();        
     }
-
-	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		doPro(request, response);
 	}
-
-	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		doPro(request, response);
 	}
-	
 	protected void doPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String command = request.getServletPath();
 		String site = null;
@@ -56,10 +50,12 @@ public class HocardController extends HttpServlet {
 		case "/mycard" : site = viewAllCardlist(request); break;
 		case "/viewcard" : site = viewCard(request); break;
 		case "/modifycard" : site = viewformodify(request); break;
+		case "/modify" : site = modifyCard(request); break;
+		case "/delete" : site = deleteCard(request); break;
+		case "/cardlog" : site = viewCardLog(request); break;
 		}
 		
 		if(site.startsWith("redirect:/")) {
-			// redirect/ 문자열 이후 경로만 가지고 옴
 			String rview = site.substring("redirect:/".length());
 			response.sendRedirect(rview);
 		} else {
@@ -72,7 +68,9 @@ public class HocardController extends HttpServlet {
 		AddCard ac = new AddCard();
 		try {	
 			BeanUtils.populate(ac, request.getParameterMap());
+			
 			dao.insertCard(ac);
+			dao.insertCardLog(0,"C");
 		} catch (Exception e) {
 			e.printStackTrace();
 			ctx.log("추가 과정에서 문제 발생!!");
@@ -123,16 +121,45 @@ public class HocardController extends HttpServlet {
 	
 	public String modifyCard(HttpServletRequest request) {
 		ModifyCard mc = new ModifyCard();
+		int card_no = Integer.parseInt(request.getParameter("card_no"));
 		try {	
 			BeanUtils.populate(mc, request.getParameterMap());
 			dao.ModifyCard(mc);
+			dao.insertCardLog(card_no,"U");
 		} catch (Exception e) {
 			e.printStackTrace();
 			ctx.log("수정 과정에서 문제 발생!!");
 			request.setAttribute("error", "카드 수정 실패");
-			return "addCard.jsp";
+			return "redirect:/viewcard?card_no=" + mc.getCard_no();
 		}
-		return "redirect:/addcard";
+		return "redirect:/viewcard?card_no=" + mc.getCard_no();
+	}
+	public String deleteCard(HttpServletRequest request) {
+		int card_no = Integer.parseInt(request.getParameter("card_no"));
+		AddCard ac = new AddCard();
+		
+        try {
+        	dao.insertDelCard(ac, card_no);
+			dao.DeleteCard(card_no);
+			dao.insertCardLog(card_no,"D");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/mycard";
+	}
+	
+	public String viewCardLog(HttpServletRequest request) {
+		List<CardLog> list;
+		try {
+			list = dao.getCardLog();
+			request.setAttribute("cardLog", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			ctx.log("카드목록 생성 중 오류발생");
+			request.setAttribute("error", "카드 목록이 정상적으로 처리되지 않았습니다!!");
+		}
+		return "cardLog.jsp";
 	}
 
 }

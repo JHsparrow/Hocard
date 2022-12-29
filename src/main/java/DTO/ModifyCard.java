@@ -1,18 +1,11 @@
 package DTO;
-
 public class ModifyCard {
-	int card_no;
 	String card_name;
 	String rarity;
 	int attack;
 	int hp;
+	int card_no;
 	
-	public int getCard_no() {
-		return card_no;
-	}
-	public void setCard_no(int card_no) {
-		this.card_no = card_no;
-	}
 	public String getCard_name() {
 		return card_name;
 	}
@@ -37,8 +30,10 @@ public class ModifyCard {
 	public void setHp(int hp) {
 		this.hp = hp;
 	}
-	
-	
-
-	
+	public int getCard_no() {
+		return card_no;
+	}
+	public void setCard_no(int card_no) {
+		this.card_no = card_no;
+	}
 }

@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,13 +26,20 @@
 			</div>
 			<div>
 				<p class="view_btn" onclick="location.href='modifycard?card_no=${card.card_no}'">수&nbsp;&nbsp;&nbsp;정</p>
-				<p class="view_btn" onclick="location.href='delete?${card.card_no}'">삭&nbsp;&nbsp;&nbsp;제</p>
-				<p class="view_btn" onclick="location.href='modify?${card.card_no}'">목&nbsp;&nbsp;&nbsp;록</p>
+				<p class="view_btn" onclick="DelCheck()">삭&nbsp;&nbsp;&nbsp;제</p>
+				<p class="view_btn" onclick="location.href='mycard'">목&nbsp;&nbsp;&nbsp;록</p>
 			</div>
 			
 		</div>
 		
 	</section>
 	<%@include file="footer.jsp" %>
+	<script>
+		function DelCheck(){
+			if(confirm('삭제하시겠습니까?')){
+				location.href='delete?card_no=${card.card_no}';
+			}
+		}
+	</script>
 </body>
 </html>
