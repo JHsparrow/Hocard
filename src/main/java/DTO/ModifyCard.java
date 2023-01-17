@@ -5,7 +5,14 @@ public class ModifyCard {
 	int attack;
 	int hp;
 	int card_no;
+	String description;
 	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public String getCard_name() {
 		return card_name;
 	}

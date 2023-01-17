@@ -5,8 +5,22 @@ public class CardList {
 	String card_name;
 	String rarity;
 	int attack;
-	int defense;
+	int hp;
+	String description;
+	int pick_no;
 	
+	public int getPick_no() {
+		return pick_no;
+	}
+	public void setPick_no(int pick_no) {
+		this.pick_no = pick_no;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public int getCard_no() {
 		return card_no;
 	}
@@ -31,12 +45,11 @@ public class CardList {
 	public void setAttack(int attack) {
 		this.attack = attack;
 	}
-	public int getDefense() {
-		return defense;
+	public int getHp() {
+		return hp;
 	}
-	public void setDefense(int defense) {
-		this.defense = defense;
+	public void setHp(int hp) {
+		this.hp = hp;
 	}
-	
 	
 }

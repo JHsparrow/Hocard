@@ -4,46 +4,45 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <% 
 	String fl_rarity = request.getParameter("fl_rarity");
-	String fl_cardno = request.getParameter("fl_cardno");
+	String fl_pickno = request.getParameter("fl_pickno");
 	String srt_rarity = request.getParameter("srt_rarity");
 	if (fl_rarity == null) fl_rarity = "none";
-	if (fl_cardno == null) fl_cardno = "none";
+	if (fl_pickno == null) fl_pickno = "none";
 	if (srt_rarity == null) srt_rarity = "none";
  %>
-<c:set var="Clist" value="${fn:length(cardList)}" />
+ <c:set var="Clist" value="${fn:length(cardList)}" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>카드 관리시스템 - 카드목록</title>
+<title>카드 관리시스템 - 내 카드목록</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 	<%@include file="topmenu.jsp" %>
-	<section <c:if test="${Clist <= 10}">class="hg100"</c:if>>  
+	<section <c:if test="${Clist <= 10}">class="hg100"</c:if>> 
 		<div class="list_con">
 			<c:choose>
 				<c:when test="${Clist eq 0}">
-					<p class="norow">현재 등록된 카드가 없습니다.</p>
+					<p class="norow">현재 뽑은 카드가 없습니다.</p>
 				</c:when>
-				<c:otherwise>	
-					<ul>
-						<c:forEach var="i" items="${cardList}" varStatus="status">
-						<c:set var="rarity" value="${i.rarity}"></c:set>
-						<li class="border_<c:out value="${rarity}" />" onclick="location.href='viewcard?card_no=${i.card_no}'">
-							
-							<img class="List_attack" src="./images/attack3.png">
-							<img class="List_hp" src="./images/hp.png">
-							<span class="list_attack_point">${i.attack}</span>
-							<span class="list_hp_point">${i.hp}</span>
-							<span class="list_name">${i.card_name}</span>
-						</li>
-						</c:forEach>
-					</ul>
+				<c:otherwise>
+				<ul>
+					<c:forEach var="i" items="${cardList}" varStatus="status">
+					<c:set var="rarity" value="${i.rarity}"></c:set>
+					<li class="border_<c:out value="${rarity}" />" onclick="location.href='viewmycard?pick_no=${i.pick_no}'">
+						<img class="List_attack" src="./images/attack3.png">
+						<img class="List_hp" src="./images/hp.png">
+						<span class="list_attack_point">${i.attack}</span>
+						<span class="list_hp_point">${i.hp}</span>
+						<span class="list_name">${i.card_name}</span>
+					</li>
+					</c:forEach>
+				</ul>
 				</c:otherwise>
 			</c:choose>
 		</div>
-		<c:if test="${Clist > 0}">
+		
 		<div class="flex_div">
 			<div>
 				<select id="fl_sel" class="srt_select" onchange="srt_rarity()">
@@ -64,21 +63,21 @@
 				<button class="fl_btn blockbtn" onclick="fl_rarity('up')">레어도순 <i class="fa-solid fa-sort"></i></button>
 				<%} %>
 				
-				<% if(fl_cardno.equals("up")){ %>
-				<button class="fl_btn blockbtn" onclick="fl_cardno('down')">등록순 <i class="fa-solid fa-sort-up"></i></button>
-				<%} else if(fl_cardno.equals("down")){ %>
-				<button class="fl_btn blockbtn" onclick="fl_cardno('none')">등록순 <i class="fa-solid fa-sort-down"></i></button>
+				<% if(fl_pickno.equals("up")){ %>
+				<button class="fl_btn blockbtn" onclick="fl_pickno('down')">등록순 <i class="fa-solid fa-sort-up"></i></button>
+				<%} else if(fl_pickno.equals("down")){ %>
+				<button class="fl_btn blockbtn" onclick="fl_pickno('none')">등록순 <i class="fa-solid fa-sort-down"></i></button>
 				<%}else{ %>
-				<button class="fl_btn blockbtn" onclick="fl_cardno('up')">등록순 <i class="fa-solid fa-sort"></i></button>
+				<button class="fl_btn blockbtn" onclick="fl_pickno('up')">등록순 <i class="fa-solid fa-sort"></i></button>
 				<%} %>
 			</div>
 		</div>
-		<form id="frm" method="get" action="cardlist">
+		
+		<form id="frm" method="get" action="mycard">
 			<input id="fl_rarity" type="hidden" name="fl_rarity" value="<%=fl_rarity %>" />
-			<input id="fl_cardno" type="hidden" name="fl_cardno" value="<%=fl_cardno %>" />
+			<input id="fl_pickno" type="hidden" name="fl_pickno" value="<%=fl_pickno %>" />
 			<input id="srt_rarity" type="hidden" name="srt_rarity" value="<%=srt_rarity %>" />
 		</form>
-		</c:if>
 	</section>
 	<script>
 		function fl_rarity(val){
@@ -86,8 +85,8 @@
 			$('#frm').submit();
 		}
 		
-		function fl_cardno(val){
-			$('#fl_cardno').val(val);
+		function fl_pickno(val){
+			$('#fl_pickno').val(val);
 			$('#frm').submit();
 		}
 		

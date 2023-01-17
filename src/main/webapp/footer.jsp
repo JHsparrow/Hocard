@@ -8,7 +8,7 @@
 </head>
 <body>
 	<footer>
-		HRDKIREA Copyright ⓒ 2021 All rights reserved. Human Resources Development Service of Korea
+		HRDKIREA Copyright ⓒ 2023 All rights reserved. Human Resources Development Service of Korea
 	</footer>
 </body>
 </html>

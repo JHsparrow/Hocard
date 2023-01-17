@@ -3,26 +3,8 @@
     
  <%
  Object setest =  session.getAttribute("userId");
- String Userid = (String)setest; 
+ String wSession = (String)setest; 
  String login_flag = (String)session.getAttribute("loginFlag");
- 
- 
- String test = request.getServletPath();
- String Page_active = null;
- switch(test){
- case "/addCard.jsp" : Page_active = "add"; break;
- case "/cardList.jsp" : Page_active = "list"; break;
- case "/cardmodify.jsp" : Page_active = "list"; break;
- case "/cardview.jsp" : Page_active = "list"; break;
- case "/cardLog.jsp" : Page_active = "log"; break;
- case "/join.jsp" : Page_active = "join"; break;
- case "/mycardlist.jsp" : Page_active = "mycard"; break;
- case "/mycardview.jsp" : Page_active = "mycard"; break;
- case "/pickCard.jsp" : Page_active = "pick"; break;
- case "/userInfoView.jsp" : Page_active = "userinfo"; break;
- case "/userInfoModify.jsp" : Page_active = "userinfo"; break;
- } 
- 	
  %>
 <!DOCTYPE html>
 <html>
@@ -35,42 +17,48 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-<div class="fixed-top">
 	<header>
-		카드관리 시스템 ver 2023
+		카드관리 시스템 ver 2023 <%if (wSession != null) out.print(wSession); %>
 	</header>
-	<nav class="navbar navbar-dark bg-dark">
-		<ul class="nav nav-pills col-10">
-			<%if (Userid != null){ %>
-				<%if (Userid.equals("admin")) {%>
-				<li class="nav-item"><a class="nav-link <%if (Page_active=="add") out.print("active");%>" href="addcard">카드추가</a></li>
-				<li class="nav-item"><a class="nav-link <%if (Page_active=="list") out.print("active");%>" href="cardlist">카드목록</a></li>
-				<li class="nav-item"><a class="nav-link <%if (Page_active=="log") out.print("active");%>" href="cardlog?pageno=1">카드로그</a></li>
-				<%} %>
-			<%} %>
-			<li class="nav-item"><a class="nav-link <%if (Page_active=="pick") out.print("active");%>" href="pickpage">카드뽑기(유저)</a></li>
-			<li class="nav-item"><a class="nav-link <%if (Page_active=="mycard") out.print("active");%>" href="mycard">뽑은카드(유저)</a></li>
-			<li class="nav-item"><a class="nav-link <%if (Page_active==null) out.print("active");%>" href="index">홈으로</a></li>
-		</ul>
-		<ul class="nav nav-pills ">
-			<%if (Userid==null)  {%>
-			<li class="nav-item"><a class="nav-link btnpointer" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">로그인</a></li>
+	<nav>
+		<ul>
+			<li><a href="addcard">카드추가</a></li>
+			<li><a href="cardlist">카드목록</a></li>
+			<li><a href="cardlog?pageno=1">카드로그</a></li>
+			<li><a href="pickpage">카드뽑기(유저)</a></li>
+			<li><a href="mycard">뽑은카드(유저)</a></li>
+			<li><a href="index">홈으로</a></li>
+			<%if (wSession==null)  {%>
+			<li><a class="btnpointer" onclick="modalControll()"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">로그인</button></a></li>
 			<%}else{ %>
-			<li class="nav-item"><a class="nav-link" href="logout" class="btnpointer">로그아웃</a></li>
+			<li><a href="logout" class="btnpointer">로그아웃</a></li>
 			<%} %>
+			<li><a href="join">회원가입</a></li>
 			
-			
-			<%if (Userid == null) { %>
-			<li class="nav-item"><a class="nav-link <%if (Page_active=="join") out.print("active");%>" href="join">회원가입</a></li>
-			<%}else{%>
-			<li class="nav-item"><a class="nav-link <%if (Page_active=="userinfo") out.print("active");%>" href="viewUserinfo">회원정보</a></li>
-			<%} %>
 		</ul>
 	</nav>
-</div>
+		<!-- <div class="modal_container">
+			<div class="modal_login">
+				<form id="frm_login" method="post" action="login">
+					<table class="modal_table nomodal">
+						<tr class="nomodal">
+							<th class="nomodal" ><label for="txt_id" >아이디</label></th>
+							<td class="nomodal"><input type="text" id="txt_id" name="userid" /></td>
+						</tr>
+						<tr class="nomodal">
+							<th class="nomodal"><label for="txt_pwd" >비밀번호</label></th>
+							<td class="nomodal"><input type="password" id="txt_pwd" name="password" /></td>
+						</tr>
+					</table>
+					<button class="modal_btn nomodal" type="button" onclick="send_login()">로그인</button>
+					<button class="modal_btn red" type="button">취소</button>
+				</form>
+			</div>
+		</div>-->
+		
 		<!-- Vertically centered modal -->
 	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered">
+	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h1 class="modal-title fs-5" id="exampleModalLabel">로그인</h1>
@@ -84,13 +72,13 @@
 	          </div>
 	          <div class="mb-3">
 	            <label for="pwd" class="col-form-label">비밀번호</label>
-	            <input type="password" class="form-control" id="pwd" name="password">
+	            <input type="text" class="form-control" id="pwd" name="password">
 	          </div>
 	        </form>
 	      </div>
-	      <div class="modal-footer modal-footer-centered">
-	        <button type="button" class="btn btn-primary" onclick="send_login()">로그인</button>
-	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Send message</button>
 	      </div>
 	    </div>
 	  </div>
@@ -100,14 +88,14 @@
 				$('.modal_container').toggle();
 			}	
 			function send_login(){
-				if ($('#userid').val()==""){
+				if ($('#txt_id').val()==""){
 					alert('아이디를 입력하시오');
-					$('#userid').focus();
+					$('#txt_id').focus();
 					return false
 				}
-				if ($('#pwd').val()==""){
+				if ($('#txt_pwd').val()==""){
 					alert('비밀번호를 입력하시오');
-					$('#pwd').focus();
+					$('#txt_pwd').focus();
 					return false
 				}
 				$('#frm_login').submit();

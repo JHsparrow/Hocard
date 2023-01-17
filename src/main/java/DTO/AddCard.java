@@ -5,9 +5,16 @@ public class AddCard {
 	String card_name;
 	String rarity;
 	int attack;
-	int defense;
+	int hp;
+	String description;
 	
 	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public int getCard_no() {
 		return card_no;
 	}
@@ -32,11 +39,12 @@ public class AddCard {
 	public void setAttack(int attack) {
 		this.attack = attack;
 	}
-	public int getDefense() {
-		return defense;
+	public int getHp() {
+		return hp;
 	}
-	public void setDefense(int defense) {
-		this.defense = defense;
+	public void setHp(int hp) {
+		this.hp = hp;
 	}
+	
 	
 }
